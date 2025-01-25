@@ -18,7 +18,6 @@ export default function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <ThemeProvider theme={theme}>
-
           <Provider store={store}>
             <GlobalStyle />
             <Header />
