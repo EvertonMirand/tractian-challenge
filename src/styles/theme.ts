@@ -1,3 +1,5 @@
+import { css } from "styled-components";
+
 export const theme = {
   colors: {
     primary: "#0D6EFD",
@@ -16,6 +18,8 @@ export const theme = {
     text: "#212529",
     mutedText: "#6C757D",
     bodyBackground: "#D8DFE6",
+    neutralTitle: "#77818C",
+    netralGray: "#77818C",
   },
   fonts: {
     fontFamily: "'Inter', sans-serif",
@@ -38,5 +42,11 @@ export const theme = {
     sm: "4px",
     md: "8px",
     lg: "16px",
+  },
+  style: {
+    center: css`
+      justify-content: center;
+      align-items: center;
+    `,
   },
 };
