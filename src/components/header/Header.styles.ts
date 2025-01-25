@@ -26,6 +26,9 @@ export interface UnitButton {
 }
 
 export const UnitButton = styled.button<UnitButton>`
+  display: flex;
+  gap: 8px;
+  ${(props) => props.theme.style.center}
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;

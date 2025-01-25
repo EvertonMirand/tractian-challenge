@@ -1,10 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { exampleReducer } from "./services/exampleSlice";
+
+import { companiesApi } from "./services/companiesSlice";
 
 export const store = configureStore({
-  reducer: { example: exampleReducer },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
+  reducer: {
+    [companiesApi.reducerPath]: companiesApi.reducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(companiesApi.middleware),
 });
 
 setupListeners(store.dispatch);
