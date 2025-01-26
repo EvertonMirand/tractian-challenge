@@ -44,15 +44,14 @@ export const TreeItemText = styled.span`
 `;
 
 export const StatusIndicator = styled.span<{
-  status: 'normal' | 'error' | 'warning';
+  status?: 'operating' | 'alert';
 }>`
   width: 10px;
   height: 10px;
   border-radius: 50%;
   margin-left: 8px;
 
-  background-color: ${({ status }) =>
-    status === 'normal' ? 'green' : status === 'error' ? 'red' : 'yellow'};
+  background-color: ${({ status }) => (status === 'alert' ? 'red' : 'green')};
 `;
 
 export const TreeContainer = styled.div`

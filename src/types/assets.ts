@@ -7,4 +7,5 @@ export interface Asset {
   sensorType?: 'vibration' | 'energy'; // Optional: Type of sensor, if applicable
   status?: 'operating' | 'alert'; // Optional: Operational status of the asset
   gatewayId?: string; // Optional: Identifier for the gateway, if applicable
+  children?: Asset[]; // Recursively nested assets
 }
