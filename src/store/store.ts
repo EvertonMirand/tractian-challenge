@@ -1,16 +1,24 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { setupListeners } from "@reduxjs/toolkit/query";
+import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
-import { companiesApi } from "./services/companiesApi";
-import { companiesReducer } from "./services/companieSlice";
+import { companiesApi } from './services/companiesApi';
+import { companiesReducer } from './services/companieSlice';
+import { assetsApi } from './services/assetsApi';
+import { locationsApi } from './services/locationApi';
 
 export const store = configureStore({
   reducer: {
     [companiesApi.reducerPath]: companiesApi.reducer,
+    [assetsApi.reducerPath]: assetsApi.reducer,
+    [locationsApi.reducerPath]: locationsApi.reducer,
     companies: companiesReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(companiesApi.middleware),
+    getDefaultMiddleware().concat(
+      companiesApi.middleware,
+      assetsApi.middleware,
+      locationsApi.middleware,
+    ),
 });
 
 setupListeners(store.dispatch);

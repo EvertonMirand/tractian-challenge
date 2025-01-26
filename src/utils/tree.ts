@@ -4,7 +4,7 @@ interface TreeStructure {
   children?: TreeStructure[];
 }
 
-function buildTree<T extends TreeStructure>(trees: T[]): T[] {
+export function buildTree<T extends TreeStructure>(trees: T[]): T[] {
   const map = new Map<string, T>();
   const newTree: T[] = [];
 

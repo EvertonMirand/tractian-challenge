@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import { ButtonGroup, HeaderContainer, UnitButton } from "./Header.styles";
-import { useGetCompaniesQuery } from "@/store/services/companiesApi";
-import { Icon } from "../global/Icon";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { selectCompany } from "@/store/services/companieSlice";
+import Image from 'next/image';
+import { ButtonGroup, HeaderContainer, UnitButton } from './Header.styles';
+import { useGetCompaniesQuery } from '@/store/services/companiesApi';
+import { Icon } from '../global/Icon';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { selectCompany } from '@/store/services/companieSlice';
 
 export const Header = () => {
   const { data: companies, error, isLoading } = useGetCompaniesQuery();
   const dispatch = useDispatch();
   const { selectedCompany } = useSelector(
-    (state: RootState) => state?.companies ?? {}
+    (state: RootState) => state?.companies ?? {},
   );
 
   return (
@@ -34,7 +34,9 @@ export const Header = () => {
               key={company.id}
               isActive={selectedCompany?.id === company.id}
               onClick={() => {
-                dispatch(selectCompany(company));
+                if (selectedCompany?.id !== company.id) {
+                  dispatch(selectCompany(company));
+                }
               }}
             >
               <Icon alt="Unit Icon" icon="gold.png" />

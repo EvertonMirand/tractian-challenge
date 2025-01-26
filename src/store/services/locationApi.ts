@@ -9,7 +9,7 @@ export const locationsApi = createApi({
     getLocations: builder.query<Location[], string>({
       query: (companyId: string) => `companies/${companyId}/locations`,
       transformResponse: (response: Location[]) => {
-        return buildTree(response);
+        return response;
       },
     }),
   }),

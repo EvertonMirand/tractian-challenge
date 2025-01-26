@@ -21,6 +21,8 @@ export const theme = {
     neutralTitle: '#77818C',
     neutralGray: '#77818C',
     borderCard: '#D8DFE6',
+    cardFilterActive: '#2188FF',
+    cardFilterDeactivate: '#ffffff',
   },
   fonts: {
     fontFamily: "'Inter', sans-serif",

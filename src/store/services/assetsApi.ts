@@ -1,9 +1,10 @@
 import { Location } from '@/types/location';
 import { baseUrl } from '@/utils/endpoint.utils';
+import { buildTree } from '@/utils/tree';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const assetsApi = createApi({
-  reducerPath: 'locationsApi',
+  reducerPath: 'assetsApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     getAssets: builder.query<Location[], string>({

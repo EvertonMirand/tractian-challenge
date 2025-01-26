@@ -30,8 +30,8 @@ export const AssetsHeaderSituationCard = styled.button.withConfig({
 })<AssetsHeaderSituationCardProp>`
   display: flex;
   width: Hug (98px) px;
+
   border: 1px solid #d8dfe6;
-  border: none;
   cursor: pointer;
   height: Hug (32px) px;
   padding: 6px 16px 6px 16px;
@@ -39,14 +39,18 @@ export const AssetsHeaderSituationCard = styled.button.withConfig({
   border-radius: 3px;
   opacity: 0px;
 
-  background-color: ${(props) => (props.isActive ? '#2E93FF' : '#162447')};
+  background: ${(props) =>
+    props.isActive
+      ? props.theme.colors.cardFilterActive
+      : props.theme.colors.cardFilterDeactivate};
   color: ${(props) => (props.isActive ? '#FFFFFF' : '#A9A9A9')};
   box-shadow: ${(props) =>
     props.isActive ? '0 4px 6px rgba(46, 147, 255, 0.4)' : 'none'};
   transition: all 0.3s;
 
   &:hover {
-    background-color: ${(props) => (props.isActive ? '#2E93FF' : '#1C2B3A')};
+    background-color: ${(props) =>
+      props.isActive ? props.theme.colors.cardFilterActive : '#1C2B3A'};
   }
 
   ${(props) => props.theme.style.center};
