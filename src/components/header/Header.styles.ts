@@ -25,7 +25,9 @@ export interface UnitButton {
   isActive?: boolean;
 }
 
-export const UnitButton = styled.button<UnitButton>`
+export const UnitButton = styled.button.withConfig({
+  shouldForwardProp: (prop) => prop !== "isActive",
+})<UnitButton>`
   display: flex;
   gap: 8px;
   ${(props) => props.theme.style.center}

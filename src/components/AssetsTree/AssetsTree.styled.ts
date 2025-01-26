@@ -1,0 +1,65 @@
+import styled from 'styled-components';
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: 8px;
+  font-family: Arial, sans-serif;
+  height: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.borderCard};
+  border-radius: 2px;
+`;
+
+export const SearchInput = styled.input`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  width: 100%;
+`;
+
+export const TreeItem = styled.div<{ isSelected?: boolean }>`
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  margin-left: ${({ isSelected }) => (isSelected ? '16px' : '8px')};
+  background-color: ${({ isSelected }) =>
+    isSelected ? '#1e90ff' : 'transparent'};
+  color: ${({ isSelected }) => (isSelected ? '#fff' : '#000')};
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ isSelected }) =>
+      isSelected ? '#1c7ed6' : '#f0f0f0'};
+  }
+`;
+
+export const TreeItemText = styled.span`
+  font-size: 14px;
+  flex: 1;
+`;
+
+export const StatusIndicator = styled.span<{
+  status: 'normal' | 'error' | 'warning';
+}>`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-left: 8px;
+
+  background-color: ${({ status }) =>
+    status === 'normal' ? 'green' : status === 'error' ? 'red' : 'yellow'};
+`;
+
+export const TreeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const NestedTree = styled.div`
+  margin-left: 16px;
+`;
