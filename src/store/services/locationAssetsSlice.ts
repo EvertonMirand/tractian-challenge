@@ -6,6 +6,7 @@ import { locationsApi } from './locationApi';
 import { assetsApi } from './assetsApi';
 import { mergeArraysByKey } from '@/utils/arrays';
 import { buildTree } from '@/utils/tree';
+import { LocationAsset } from '@/types/mergedLocationAssets';
 
 export interface LocationAssetsState {
   locations: Location[];
@@ -13,8 +14,12 @@ export interface LocationAssetsState {
   loading: boolean;
   error?: string;
   openItems: { [id: string]: boolean };
-  locationTree?: Location[];
+  locationTree?: LocationAsset[];
   filters: { name?: string; status?: string };
+  isLocationsLoading?: boolean; // Track loading state for locations
+  isAssetsLoading?: boolean; // Track loading state for assets
+  isLocationsLoaded?: boolean; // Flag to check if locations are loaded
+  isAssetsLoaded?: boolean; // Flag to check if assets are loaded
 }
 
 export const initialState: LocationAssetsState = {
@@ -43,8 +48,8 @@ const locationAssetsSlice = createSlice({
     setAssets: (state, action: PayloadAction<Asset[]>) => {
       state.assets = action.payload;
     },
-    setLocationTree: (state, action: PayloadAction<Location[]>) => {
-      state.locationTree = [];
+    setLocationTree: (state, action: PayloadAction<LocationAsset[]>) => {
+      console.log('Updating Tree in State:', action.payload);
       state.locationTree = action.payload;
     },
     toggleItemOpen: (state, action: PayloadAction<string>) => {
@@ -60,44 +65,60 @@ const locationAssetsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addMatcher(locationsApi.endpoints.getLocations.matchPending, (state) => {
+        state.isLocationsLoading = true;
+        state.isLocationsLoaded = false;
+      })
       .addMatcher(
         locationsApi.endpoints.getLocations.matchFulfilled,
         (state, action) => {
           state.locations = action.payload;
-        },
-      )
-      .addMatcher(
-        assetsApi.endpoints.getAssets.matchFulfilled,
-        (state, action) => {
-          state.assets = action.payload;
-          console.log('Assets fetched:', action.payload);
-          if (state.locations.length > 0 || state.assets.length > 0) {
-            const merged = mergeArraysByKey(
-              state.locations,
-              state.assets,
-              'id',
-              'locationId',
-              'assets',
-              'id',
-            ) as Location[];
-
-            state.locationTree = buildTree(merged);
-          } else {
-            console.log('No locations or assets available for merging');
-          }
+          state.isLocationsLoading = false;
+          state.isLocationsLoaded = true;
         },
       )
       .addMatcher(
         locationsApi.endpoints.getLocations.matchRejected,
-
         (state, action) => {
-          state.error = action.error.message || 'Something went wrong';
+          state.isLocationsLoading = false;
+          state.error = action.error.message || 'Failed to load locations';
+        },
+      )
+      .addMatcher(assetsApi.endpoints.getAssets.matchPending, (state) => {
+        state.isAssetsLoading = true;
+      })
+      .addMatcher(
+        assetsApi.endpoints.getAssets.matchFulfilled,
+        (state, action) => {
+          state.assets = action.payload;
+          state.isAssetsLoading = false;
+          state.isAssetsLoaded = true;
+
+          // Only proceed with merging when both locations and assets are loaded
+          if (state.isLocationsLoaded && state.isAssetsLoaded) {
+            const merged = mergeArraysByKey({
+              arr1: state.locations,
+              arr2: state.assets,
+              keyArr1: 'id',
+              keyArr2: 'locationId',
+              keyArr2NotInArr1: 'id',
+              keyChildrenName: 'assets',
+              keyToMarkTheArr1Type: 'isLocation',
+              keyToMarkTheArr2Type: 'isAsset',
+            }) as LocationAsset[];
+
+            console.log('Merged Data:', merged);
+            const tree = buildTree(merged);
+            state.locationTree = tree;
+            console.log('Tree Structure:', tree);
+          }
         },
       )
       .addMatcher(
         assetsApi.endpoints.getAssets.matchRejected,
         (state, action) => {
-          state.error = action.error.message || 'Something went wrong';
+          state.isAssetsLoading = false;
+          state.error = action.error.message || 'Failed to load assets';
         },
       );
   },

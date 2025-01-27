@@ -4,9 +4,11 @@ import Image from 'next/image';
 import { ButtonGroup, HeaderContainer, UnitButton } from './Header.styles';
 import { useGetCompaniesQuery } from '@/store/services/companiesApi';
 import { Icon } from '../global/Icon';
+import debounce from 'lodash.debounce';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { selectCompany } from '@/store/services/companieSlice';
+import { Company } from '@/types/company';
 
 export const Header = () => {
   const { data: companies, error, isLoading } = useGetCompaniesQuery();
@@ -14,6 +16,17 @@ export const Header = () => {
   const { selectedCompany } = useSelector(
     (state: RootState) => state?.companies ?? {},
   );
+
+  const { isAssetsLoading, isLocationsLoading } = useSelector(
+    (state: RootState) => state.locations,
+  );
+
+  // Create a debounced version of setCompanyId
+  const debouncedSetCompanyId = debounce((company: Company) => {
+    dispatch(selectCompany(company));
+  }, 500); // 500ms debounce
+
+  console.log(isAssetsLoading, isLocationsLoading);
 
   return (
     <HeaderContainer>
@@ -34,8 +47,12 @@ export const Header = () => {
               key={company.id}
               isActive={selectedCompany?.id === company.id}
               onClick={() => {
-                if (selectedCompany?.id !== company.id) {
-                  dispatch(selectCompany(company));
+                if (
+                  !isAssetsLoading &&
+                  !isLocationsLoading &&
+                  selectedCompany?.id !== company.id
+                ) {
+                  debouncedSetCompanyId(company);
                 }
               }}
             >

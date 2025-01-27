@@ -8,12 +8,10 @@ import { useGetLocationsQuery } from '@/store/services/locationApi';
 import { useGetAssetsQuery } from '@/store/services/assetsApi';
 
 import { AssetsTreeItem } from './AssetsTreeItem';
-import { setLocationTree } from '@/store/services/locationAssetsSlice';
 
 export const AssetsTree = () => {
   const dispatch = useDispatch();
   const { locationTree } = useSelector((state: RootState) => state.locations);
-  console.log(locationTree);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {};
 
@@ -29,7 +27,6 @@ export const AssetsTree = () => {
     skip: !selectedCompany?.id,
   });
 
-  console.log('Selected Company:', selectedCompany?.id);
   const {
     refetch: refetchAssets,
     isLoading: isLoadingAssets,
@@ -53,6 +50,7 @@ export const AssetsTree = () => {
   if (isLoadingLocations || isLoadingAssets) {
     return <p>Loading...</p>;
   }
+
   return (
     <Container>
       <SearchInput

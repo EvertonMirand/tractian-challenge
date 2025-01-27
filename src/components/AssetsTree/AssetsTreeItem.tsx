@@ -6,18 +6,17 @@ import {
   TreeItemText,
 } from './AssetsTree.styled';
 import { Location } from '@/types/location';
-import { Asset } from '@/types/assets';
+
 import { Icon } from '../global/Icon';
 import { useDispatch } from 'react-redux';
+import { LocationAsset } from '@/types/mergedLocationAssets';
 
 export const AssetsTreeItem: React.FC<{
-  child: Location | Asset;
+  child: LocationAsset;
   isAsset?: boolean;
   isFirst?: boolean;
-}> = ({ child, isAsset, isFirst }) => {
+}> = ({ child }) => {
   const dispatch = useDispatch();
-
-  const asset = child as Asset;
 
   const handleToggle = (id: string) => {};
 
@@ -26,8 +25,8 @@ export const AssetsTreeItem: React.FC<{
       <TreeItem onClick={() => handleToggle(child.id)}>
         <TreeItemText>{child.name}</TreeItemText>
 
-        {asset?.gatewayId &&
-          (asset?.status === 'operating' ? (
+        {child?.gatewayId &&
+          (child?.status === 'operating' ? (
             <Icon
               alt="Energy Sensor Icon"
               icon="green-thunderbolt.png"
@@ -35,15 +34,15 @@ export const AssetsTreeItem: React.FC<{
               width={11}
             />
           ) : (
-            <StatusIndicator status={asset?.status} />
+            <StatusIndicator status={child?.status} />
           ))}
       </TreeItem>
       <NestedTree>
         {child.children?.map((child) => (
-          <AssetsTreeItem key={child.id} child={child} isAsset={isAsset} />
+          <AssetsTreeItem key={child.id} child={child} />
         ))}
       </NestedTree>
-      {!isAsset && (
+      {!child?.isAsset && (
         <NestedTree>
           {(child as Location)?.assets?.map((asset) => (
             <AssetsTreeItem key={asset.id} child={asset} isAsset />

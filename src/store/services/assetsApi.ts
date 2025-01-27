@@ -1,3 +1,4 @@
+import { Asset } from '@/types/assets';
 import { Location } from '@/types/location';
 import { baseUrl } from '@/utils/endpoint.utils';
 import { buildTree } from '@/utils/tree';
@@ -7,13 +8,13 @@ export const assetsApi = createApi({
   reducerPath: 'assetsApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
-    getAssets: builder.query<Location[], string>({
+    getAssets: builder.query<Asset[], string>({
       query: (companyId: string) => `companies/${companyId}/assets`,
-      transformResponse: (response: Location[]) => {
+      transformResponse: (response: Asset[]) => {
         return buildTree(response);
       },
     }),
   }),
 });
 
-export const { useGetAssetsQuery, useLazyGetAssetsQuery } = assetsApi;
+export const { useGetAssetsQuery } = assetsApi;
