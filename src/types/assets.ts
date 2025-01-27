@@ -1,3 +1,5 @@
+export type AssetStatus = 'operating' | 'alert';
+
 export interface Asset {
   id: string;
   name: string;

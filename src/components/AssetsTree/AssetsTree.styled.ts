@@ -6,6 +6,7 @@ export const Container = styled.div`
   width: 100%;
   max-width: 400px;
   padding: 8px;
+  gap: 5px;
   font-family: Arial, sans-serif;
   height: 100%;
   border: 1px solid ${({ theme }) => theme.colors.borderCard};

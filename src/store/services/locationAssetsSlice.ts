@@ -1,12 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Location } from '@/types/location';
-import { Asset } from '@/types/assets';
+import { Asset, AssetStatus } from '@/types/assets';
 import { locationsApi } from './locationApi';
 import { assetsApi } from './assetsApi';
 import { mergeArraysByKey } from '@/utils/arrays';
 import { buildTree } from '@/utils/tree';
 import { LocationAsset } from '@/types/mergedLocationAssets';
+
+export interface LocationAssetsFilters {
+  name?: string;
+  status?: AssetStatus;
+}
 
 export interface LocationAssetsState {
   locations: Location[];
@@ -15,7 +20,7 @@ export interface LocationAssetsState {
   error?: string;
   openItems: { [id: string]: boolean };
   locationTree?: LocationAsset[];
-  filters: { name?: string; status?: string };
+  filters: LocationAssetsFilters;
   isLocationsLoading?: boolean; // Track loading state for locations
   isAssetsLoading?: boolean; // Track loading state for assets
   isLocationsLoaded?: boolean; // Flag to check if locations are loaded
@@ -56,10 +61,7 @@ const locationAssetsSlice = createSlice({
       const id = action.payload;
       state.openItems[id] = !state.openItems[id];
     },
-    setFilters: (
-      state,
-      action: PayloadAction<{ name?: string; status?: string }>,
-    ) => {
+    setFilters: (state, action: PayloadAction<LocationAssetsFilters>) => {
       state.filters = { ...state.filters, ...action.payload };
     },
   },
@@ -82,7 +84,7 @@ const locationAssetsSlice = createSlice({
       .addMatcher(
         (action) => action.type.endsWith('fulfilled'),
         (state) => {
-          console.log('oi')
+          console.log('oi');
           // Check if both are loaded
           if (state.isLocationsLoaded && state.isAssetsLoaded) {
             state.loading = true;

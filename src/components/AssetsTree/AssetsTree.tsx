@@ -8,17 +8,12 @@ import { useGetLocationsQuery } from '@/store/services/locationApi';
 import { useGetAssetsQuery } from '@/store/services/assetsApi';
 
 import { AssetsTreeItem } from './AssetsTreeItem';
-import {
-  setFilters,
-  setLocationTree,
-} from '@/store/services/locationAssetsSlice';
+import { setFilters } from '@/store/services/locationAssetsSlice';
 import { selectFilteredTree } from '@/store/selectors/selectFilteredTree';
 
 export const AssetsTree = () => {
   const dispatch = useDispatch();
-  const { locationTree, loading } = useSelector(
-    (state: RootState) => state.locations,
-  );
+  const { loading } = useSelector((state: RootState) => state.locations);
 
   const filters = useSelector((state: RootState) => state.locations.filters);
   const filteredTree = useSelector((state: RootState) =>
@@ -74,12 +69,7 @@ export const AssetsTree = () => {
       <TreeContainer>
         {filteredTree?.map((location) => (
           <>
-            <AssetsTreeItem
-              key={location.id}
-              child={location}
-              isAsset={false}
-              isFirst
-            />
+            <AssetsTreeItem key={location.id} child={location} />
           </>
         ))}
       </TreeContainer>

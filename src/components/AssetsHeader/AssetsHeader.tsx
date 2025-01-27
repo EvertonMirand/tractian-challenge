@@ -1,20 +1,34 @@
-import React from "react";
-import { Icon } from "../global/Icon";
+import React from 'react';
+import { Icon } from '../global/Icon';
 import {
   AssetsHeaderContainer,
   AssetsHeaderSituationCard,
   AssetsHeaderSituationContainer,
   AssetsHeaderTitle,
-} from "./AssetsHeader.styled";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+} from './AssetsHeader.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { AssetStatus } from '@/types/assets';
+import { setFilters } from '@/store/services/locationAssetsSlice';
 
 // import { Container } from './styles';
 
 const AssetsHeader: React.FC = () => {
   const { selectedCompany } = useSelector(
-    (state: RootState) => state?.companies ?? {}
+    (state: RootState) => state?.companies ?? {},
   );
+
+  const dispatch = useDispatch();
+
+  const { filters } = useSelector((state: RootState) => state?.locations ?? {});
+
+  const { status } = filters ?? {};
+
+  const onClick = (newStatus: AssetStatus) => {
+    dispatch(
+      setFilters({ status: status === newStatus ? undefined : newStatus }),
+    );
+  };
 
   return (
     <AssetsHeaderContainer>
@@ -23,12 +37,26 @@ const AssetsHeader: React.FC = () => {
         <h3>{`/ ${selectedCompany?.name} unit`}</h3>
       </AssetsHeaderTitle>
       <AssetsHeaderSituationContainer>
-        <AssetsHeaderSituationCard>
-          <Icon alt="Energy Sensor Icon" icon="blue-thunderbolt.png" />
+        <AssetsHeaderSituationCard
+          isActive={status === 'operating'}
+          onClick={() => onClick('operating')}
+        >
+          <Icon
+            alt="Energy Sensor Icon"
+            icon={`${
+              status === 'operating' ? 'white' : 'blue'
+            }-thunderbolt.png`}
+          />
           <p>Energy Sensor</p>
         </AssetsHeaderSituationCard>
-        <AssetsHeaderSituationCard>
-          <Icon alt="Critical Icon" icon="blue-critical.png" />
+        <AssetsHeaderSituationCard
+          isActive={status === 'alert'}
+          onClick={() => onClick('alert')}
+        >
+          <Icon
+            alt="Critical Icon"
+            icon={`${status === 'alert' ? 'white' : 'blue'}-critical.png`}
+          />
           <p>Critical</p>
         </AssetsHeaderSituationCard>
       </AssetsHeaderSituationContainer>

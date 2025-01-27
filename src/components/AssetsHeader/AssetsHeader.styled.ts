@@ -43,7 +43,7 @@ export const AssetsHeaderSituationCard = styled.button.withConfig({
     props.isActive
       ? props.theme.colors.cardFilterActive
       : props.theme.colors.cardFilterDeactivate};
-  color: ${(props) => (props.isActive ? '#FFFFFF' : '#A9A9A9')};
+
   box-shadow: ${(props) =>
     props.isActive ? '0 4px 6px rgba(46, 147, 255, 0.4)' : 'none'};
   transition: all 0.3s;
@@ -56,7 +56,7 @@ export const AssetsHeaderSituationCard = styled.button.withConfig({
   ${(props) => props.theme.style.center};
 
   p {
-    color: ${(props) => props.theme.colors.neutralGray};
+    color: ${(props) => (props.isActive ? '#FFFFFF' : '#A9A9A9')};
     font-weight: 600;
   }
 `;
