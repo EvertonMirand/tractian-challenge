@@ -26,6 +26,7 @@ export const TreeItem = styled.button<{ isSelected?: boolean }>`
   display: flex;
   text-align: left;
   padding: 4px 8px;
+  width: 100%;
   margin-left: ${({ isSelected }) => (isSelected ? '16px' : '8px')};
   background-color: ${({ isSelected }) =>
     isSelected ? '#1e90ff' : 'transparent'};

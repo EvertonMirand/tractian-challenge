@@ -1,6 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '@/store/store';
-import { Asset } from '@/types/assets';
 import { LocationAsset } from '@/types/mergedLocationAssets';
 
 export const selectFilteredTree = createSelector(
@@ -22,23 +21,14 @@ export const selectFilteredTree = createSelector(
       );
     };
 
-    const matchesAssetFilter = (asset: Asset) => {
-      return (
-        (!nameFilter ||
-          asset.name.toLowerCase().includes(nameFilter.toLowerCase())) &&
-        (!statusFilter || asset.status === statusFilter)
-      );
-    };
-
     const filterTree = (nodes: LocationAsset[]): LocationAsset[] => {
       return nodes
         .map((node) => {
           const filteredChildren = node.children
             ? filterTree(node.children)
             : [];
-          const filteredAssets = node.assets
-            ? node.assets.filter(matchesAssetFilter)
-            : [];
+
+          const filteredAssets = node.assets ? filterTree(node.assets) : [];
 
           if (
             matchesNodeFilter(node) ||
