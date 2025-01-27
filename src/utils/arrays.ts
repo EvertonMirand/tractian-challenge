@@ -8,6 +8,7 @@ export function mergeArraysByKey<T extends Arr, G extends Arr>(
   keyArr1: string | number | symbol,
   keyArr2: string | number | symbol,
   keyChildrenName: string | number | symbol = 'children',
+  keyArr2NotInArr1: string | number | symbol = 'id',
 ) {
   const map = arr1.reduce((map, value1) => {
     return { ...map, [value1[keyArr1]]: { ...value1, [keyChildrenName]: [] } };
@@ -16,6 +17,8 @@ export function mergeArraysByKey<T extends Arr, G extends Arr>(
   arr2.forEach((value2) => {
     if (value2[keyArr2] && map[value2[keyArr2]]) {
       map[value2[keyArr2]]?.[keyChildrenName]?.push(value2);
+    } else {
+      map[value2[keyArr2NotInArr1]] = { ...value2, [keyChildrenName]: [] };
     }
   });
 

@@ -5,10 +5,7 @@ import { companiesApi } from './services/companiesApi';
 import { companiesReducer } from './services/companieSlice';
 import { assetsApi } from './services/assetsApi';
 import { locationsApi } from './services/locationApi';
-import {
-  locationAssetsReducer,
-  locationAssetsSlice,
-} from './services/locationAssetsSlice';
+import { locationAssetsReducer } from './services/locationAssetsSlice';
 
 export const store = configureStore({
   reducer: {

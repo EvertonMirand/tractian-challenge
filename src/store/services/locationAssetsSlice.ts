@@ -12,14 +12,19 @@ export interface LocationAssetsState {
   assets: Location[];
   loading: boolean;
   error?: string;
+  openItems: { [id: string]: boolean };
   locationTree?: Location[];
+  filters: { name?: string; status?: string };
 }
 
 export const initialState: LocationAssetsState = {
   locations: [],
   assets: [],
+  locationTree: [],
+  openItems: {},
   loading: false,
   error: undefined,
+  filters: {},
 };
 
 const locationAssetsSlice = createSlice({
@@ -39,7 +44,18 @@ const locationAssetsSlice = createSlice({
       state.assets = action.payload;
     },
     setLocationTree: (state, action: PayloadAction<Location[]>) => {
+      state.locationTree = [];
       state.locationTree = action.payload;
+    },
+    toggleItemOpen: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+      state.openItems[id] = !state.openItems[id];
+    },
+    setFilters: (
+      state,
+      action: PayloadAction<{ name?: string; status?: string }>,
+    ) => {
+      state.filters = { ...state.filters, ...action.payload };
     },
   },
   extraReducers: (builder) => {
@@ -54,17 +70,17 @@ const locationAssetsSlice = createSlice({
         assetsApi.endpoints.getAssets.matchFulfilled,
         (state, action) => {
           state.assets = action.payload;
-
-          if (state.locations.length > 0 && state.assets.length > 0) {
-            console.log('Merging locations and assets...');
+          console.log('Assets fetched:', action.payload);
+          if (state.locations.length > 0 || state.assets.length > 0) {
             const merged = mergeArraysByKey(
               state.locations,
               state.assets,
               'id',
               'locationId',
               'assets',
+              'id',
             ) as Location[];
-            console.log(merged);
+
             state.locationTree = buildTree(merged);
           } else {
             console.log('No locations or assets available for merging');
@@ -87,8 +103,13 @@ const locationAssetsSlice = createSlice({
   },
 });
 
-export const { setLoading, setError, setLocationTree } =
-  locationAssetsSlice.actions;
+export const {
+  setLoading,
+  setError,
+  setLocationTree,
+  toggleItemOpen,
+  setFilters,
+} = locationAssetsSlice.actions;
 
 export { locationAssetsSlice };
 export const locationAssetsReducer = locationAssetsSlice.reducer;

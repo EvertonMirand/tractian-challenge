@@ -8,20 +8,25 @@ import {
 import { Location } from '@/types/location';
 import { Asset } from '@/types/assets';
 import { Icon } from '../global/Icon';
+import { useDispatch } from 'react-redux';
 
 export const AssetsTreeItem: React.FC<{
   child: Location | Asset;
   isAsset?: boolean;
-}> = ({ child, isAsset }) => {
+  isFirst?: boolean;
+}> = ({ child, isAsset, isFirst }) => {
+  const dispatch = useDispatch();
+
   const asset = child as Asset;
+
+  const handleToggle = (id: string) => {};
 
   return (
     <>
-      <TreeItem>
+      <TreeItem onClick={() => handleToggle(child.id)}>
         <TreeItemText>{child.name}</TreeItemText>
 
-        {isAsset &&
-          asset.gatewayId &&
+        {asset?.gatewayId &&
           (asset?.status === 'operating' ? (
             <Icon
               alt="Energy Sensor Icon"

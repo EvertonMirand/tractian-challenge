@@ -1,51 +1,64 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import {
-  Container,
-  NestedTree,
-  SearchInput,
-  StatusIndicator,
-  TreeContainer,
-  TreeItem,
-  TreeItemText,
-} from './AssetsTree.styled';
+import React, { useEffect } from 'react';
+import { Container, SearchInput, TreeContainer } from './AssetsTree.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useGetLocationsQuery } from '@/store/services/locationApi';
 import { useGetAssetsQuery } from '@/store/services/assetsApi';
-import { mergeArraysByKey } from '@/utils/arrays';
-import { buildTree } from '@/utils/tree';
+
 import { AssetsTreeItem } from './AssetsTreeItem';
+import { setLocationTree } from '@/store/services/locationAssetsSlice';
 
 export const AssetsTree = () => {
-  const { locationTree, loading, error } = useSelector(
-    (state: RootState) => state.locations,
-  );
+  const dispatch = useDispatch();
+  const { locationTree } = useSelector((state: RootState) => state.locations);
+  console.log(locationTree);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {};
 
   const { selectedCompany } = useSelector(
     (state: RootState) => state.companies,
   );
 
-  const { data: locations } = useGetLocationsQuery(selectedCompany?.id ?? '', {
+  const {
+    refetch: refetchLocations,
+    isLoading: isLoadingLocations,
+    isError: isErrorLocation,
+  } = useGetLocationsQuery(selectedCompany?.id ?? '', {
     skip: !selectedCompany?.id,
   });
 
-  useGetAssetsQuery(selectedCompany?.id ?? '', {
-    skip: !locations?.length,
+  console.log('Selected Company:', selectedCompany?.id);
+  const {
+    refetch: refetchAssets,
+    isLoading: isLoadingAssets,
+    isError: isErrorAssets,
+  } = useGetAssetsQuery(selectedCompany?.id ?? '', {
+    skip: !selectedCompany?.id,
   });
 
-  if (error) {
+  useEffect(() => {
+    if (selectedCompany?.id) {
+      refetchLocations();
+      refetchAssets();
+    }
+  }, [selectedCompany, dispatch]);
+
+  // In case of data error or loading, return a message
+  if (isErrorLocation || isErrorAssets) {
     return <p>Could not fetch locations or assets</p>;
   }
 
-  if (loading) {
+  if (isLoadingLocations || isLoadingAssets) {
     return <p>Loading...</p>;
   }
-
   return (
     <Container>
-      <SearchInput placeholder="Buscar Ativo ou Local" />
+      <SearchInput
+        placeholder="Buscar Ativo ou Local"
+        onChange={handleSearch}
+      />
 
       <TreeContainer>
         {locationTree?.map((location) => (
@@ -54,6 +67,7 @@ export const AssetsTree = () => {
               key={location.id}
               child={location}
               isAsset={false}
+              isFirst
             />
           </>
         ))}

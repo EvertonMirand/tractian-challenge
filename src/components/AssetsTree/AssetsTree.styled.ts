@@ -21,9 +21,9 @@ export const SearchInput = styled.input`
   width: 100%;
 `;
 
-export const TreeItem = styled.div<{ isSelected?: boolean }>`
+export const TreeItem = styled.button<{ isSelected?: boolean }>`
   display: flex;
-  align-items: center;
+  text-align: left;
   padding: 4px 8px;
   margin-left: ${({ isSelected }) => (isSelected ? '16px' : '8px')};
   background-color: ${({ isSelected }) =>
