@@ -8,12 +8,26 @@ import { useGetLocationsQuery } from '@/store/services/locationApi';
 import { useGetAssetsQuery } from '@/store/services/assetsApi';
 
 import { AssetsTreeItem } from './AssetsTreeItem';
+import {
+  setFilters,
+  setLocationTree,
+} from '@/store/services/locationAssetsSlice';
+import { selectFilteredTree } from '@/store/selectors/selectFilteredTree';
 
 export const AssetsTree = () => {
   const dispatch = useDispatch();
-  const { locationTree } = useSelector((state: RootState) => state.locations);
+  const { locationTree, loading } = useSelector(
+    (state: RootState) => state.locations,
+  );
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const filters = useSelector((state: RootState) => state.locations.filters);
+  const filteredTree = useSelector((state: RootState) =>
+    selectFilteredTree(state),
+  );
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setFilters({ ...filters, name: e.target.value }));
+  };
 
   const { selectedCompany } = useSelector(
     (state: RootState) => state.companies,
@@ -21,16 +35,16 @@ export const AssetsTree = () => {
 
   const {
     refetch: refetchLocations,
-    isLoading: isLoadingLocations,
     isError: isErrorLocation,
+    isLoading: isLocationsLoading,
   } = useGetLocationsQuery(selectedCompany?.id ?? '', {
     skip: !selectedCompany?.id,
   });
 
   const {
     refetch: refetchAssets,
-    isLoading: isLoadingAssets,
     isError: isErrorAssets,
+    isLoading: isLoadingAssets,
   } = useGetAssetsQuery(selectedCompany?.id ?? '', {
     skip: !selectedCompany?.id,
   });
@@ -42,12 +56,11 @@ export const AssetsTree = () => {
     }
   }, [selectedCompany, dispatch]);
 
-  // In case of data error or loading, return a message
   if (isErrorLocation || isErrorAssets) {
     return <p>Could not fetch locations or assets</p>;
   }
 
-  if (isLoadingLocations || isLoadingAssets) {
+  if (isLoadingAssets || isLocationsLoading || loading) {
     return <p>Loading...</p>;
   }
 
@@ -59,7 +72,7 @@ export const AssetsTree = () => {
       />
 
       <TreeContainer>
-        {locationTree?.map((location) => (
+        {filteredTree?.map((location) => (
           <>
             <AssetsTreeItem
               key={location.id}

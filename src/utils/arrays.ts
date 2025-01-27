@@ -23,8 +23,6 @@ export function mergeArraysByKey<T extends Arr, G extends Arr>({
   keyToMarkTheArr2Type = 'type2',
   keyArr2NotInArr1 = 'id',
 }: mergeArraysByKeyParam<T, G>) {
-  console.log(JSON.stringify(arr1), 'arr1');
-  console.log(JSON.stringify(arr2), 'arr2');
   const map = arr1.reduce((map, value1) => {
     return {
       ...map,

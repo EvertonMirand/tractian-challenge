@@ -26,8 +26,6 @@ export const Header = () => {
     dispatch(selectCompany(company));
   }, 500); // 500ms debounce
 
-  console.log(isAssetsLoading, isLocationsLoading);
-
   return (
     <HeaderContainer>
       <Image
@@ -47,11 +45,7 @@ export const Header = () => {
               key={company.id}
               isActive={selectedCompany?.id === company.id}
               onClick={() => {
-                if (
-                  !isAssetsLoading &&
-                  !isLocationsLoading &&
-                  selectedCompany?.id !== company.id
-                ) {
+                if (selectedCompany?.id !== company.id) {
                   debouncedSetCompanyId(company);
                 }
               }}

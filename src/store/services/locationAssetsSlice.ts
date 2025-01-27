@@ -65,37 +65,27 @@ const locationAssetsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(locationsApi.endpoints.getLocations.matchPending, (state) => {
-        state.isLocationsLoading = true;
-        state.isLocationsLoaded = false;
-      })
       .addMatcher(
         locationsApi.endpoints.getLocations.matchFulfilled,
         (state, action) => {
           state.locations = action.payload;
-          state.isLocationsLoading = false;
-          state.isLocationsLoaded = true;
+          state.isLocationsLoaded = true; // Mark locations as loaded
         },
       )
-      .addMatcher(
-        locationsApi.endpoints.getLocations.matchRejected,
-        (state, action) => {
-          state.isLocationsLoading = false;
-          state.error = action.error.message || 'Failed to load locations';
-        },
-      )
-      .addMatcher(assetsApi.endpoints.getAssets.matchPending, (state) => {
-        state.isAssetsLoading = true;
-      })
       .addMatcher(
         assetsApi.endpoints.getAssets.matchFulfilled,
         (state, action) => {
           state.assets = action.payload;
-          state.isAssetsLoading = false;
-          state.isAssetsLoaded = true;
-
-          // Only proceed with merging when both locations and assets are loaded
+          state.isAssetsLoaded = true; // Mark assets as loaded
+        },
+      )
+      .addMatcher(
+        (action) => action.type.endsWith('fulfilled'),
+        (state) => {
+          console.log('oi')
+          // Check if both are loaded
           if (state.isLocationsLoaded && state.isAssetsLoaded) {
+            state.loading = true;
             const merged = mergeArraysByKey({
               arr1: state.locations,
               arr2: state.assets,
@@ -107,13 +97,32 @@ const locationAssetsSlice = createSlice({
               keyToMarkTheArr2Type: 'isAsset',
             }) as LocationAsset[];
 
-            console.log('Merged Data:', merged);
             const tree = buildTree(merged);
+            state.loading = false;
             state.locationTree = tree;
-            console.log('Tree Structure:', tree);
+
+            // Optionally reset the flags if you want to reload data again later
+            state.isLocationsLoaded = false;
+            state.isAssetsLoaded = false;
           }
         },
       )
+      .addMatcher(locationsApi.endpoints.getLocations.matchPending, (state) => {
+        state.isLocationsLoading = true;
+        state.isLocationsLoaded = false;
+      })
+
+      .addMatcher(
+        locationsApi.endpoints.getLocations.matchRejected,
+        (state, action) => {
+          state.isLocationsLoading = false;
+          state.error = action.error.message || 'Failed to load locations';
+        },
+      )
+      .addMatcher(assetsApi.endpoints.getAssets.matchPending, (state) => {
+        state.isAssetsLoading = true;
+      })
+
       .addMatcher(
         assetsApi.endpoints.getAssets.matchRejected,
         (state, action) => {
