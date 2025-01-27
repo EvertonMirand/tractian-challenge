@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Container, SearchInput, TreeContainer } from './AssetsTree.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -10,6 +10,7 @@ import { useGetAssetsQuery } from '@/store/services/assetsApi';
 import { AssetsTreeItem } from './AssetsTreeItem';
 import { setFilters } from '@/store/services/locationAssetsSlice';
 import { selectFilteredTree } from '@/store/selectors/selectFilteredTree';
+import debounce from 'lodash.debounce';
 
 export const AssetsTree = () => {
   const dispatch = useDispatch();
@@ -20,9 +21,16 @@ export const AssetsTree = () => {
     selectFilteredTree(state),
   );
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setFilters({ ...filters, name: e.target.value }));
-  };
+  const debounceHandleSearch = debounce(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(setFilters({ name: e.target.value }));
+    },
+    500,
+  );
+
+  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    debounceHandleSearch(e);
+  }, []);
 
   const { selectedCompany } = useSelector(
     (state: RootState) => state.companies,

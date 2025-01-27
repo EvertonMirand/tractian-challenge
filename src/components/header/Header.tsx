@@ -17,19 +17,14 @@ export const Header = () => {
     (state: RootState) => state?.companies ?? {},
   );
 
-  const { isAssetsLoading, isLocationsLoading } = useSelector(
-    (state: RootState) => state.locations,
-  );
-
-  // Create a debounced version of setCompanyId
   const debouncedSetCompanyId = debounce((company: Company) => {
     dispatch(selectCompany(company));
-  }, 500); // 500ms debounce
+  }, 500);
 
   return (
     <HeaderContainer>
       <Image
-        src="/images/logo-tractian.png" // Path to the logo in the `public` folder
+        src="/images/logo-tractian.png"
         alt="Tractian Logo"
         width={100}
         height={14}

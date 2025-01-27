@@ -8,15 +8,21 @@ import {
 import { Location } from '@/types/location';
 
 import { Icon } from '../global/Icon';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LocationAsset } from '@/types/mergedLocationAssets';
+import { toggleItemOpen } from '@/store/services/locationAssetsSlice';
+import { RootState } from '@/store/store';
 
 export const AssetsTreeItem: React.FC<{
   child: LocationAsset;
 }> = ({ child }) => {
   const dispatch = useDispatch();
 
-  const handleToggle = (id: string) => {};
+  const { openItems } = useSelector((state: RootState) => state.locations);
+
+  const handleToggle = (id: string) => {
+    dispatch(toggleItemOpen(id));
+  };
 
   const leftIcon = useMemo(() => {
     const { isAsset, isLocation, gatewayId } = child;
@@ -41,7 +47,13 @@ export const AssetsTreeItem: React.FC<{
 
   return (
     <>
-      <TreeItem onClick={() => handleToggle(child.id)}>
+      <TreeItem
+        onClick={() => {
+          if (assets?.length > 0 || children?.length > 0) {
+            handleToggle(child.id);
+          }
+        }}
+      >
         {(children?.length > 0 || assets?.length > 0) && (
           <Icon alt="Expand Icon" icon="chevron-down.png" />
         )}
@@ -60,17 +72,21 @@ export const AssetsTreeItem: React.FC<{
             <StatusIndicator status={child?.status} />
           ))}
       </TreeItem>
-      <NestedTree>
-        {child.children?.map((child) => (
-          <AssetsTreeItem key={child.id} child={child} />
-        ))}
-      </NestedTree>
-      {!child?.isAsset && (
-        <NestedTree>
-          {(child as Location)?.assets?.map((asset) => (
-            <AssetsTreeItem key={asset.id} child={asset} />
-          ))}
-        </NestedTree>
+      {openItems[child.id] && (
+        <>
+          <NestedTree>
+            {child.children?.map((child) => (
+              <AssetsTreeItem key={child.id} child={child} />
+            ))}
+          </NestedTree>
+          {!child?.isAsset && (
+            <NestedTree>
+              {(child as Location)?.assets?.map((asset) => (
+                <AssetsTreeItem key={asset.id} child={asset} />
+              ))}
+            </NestedTree>
+          )}
+        </>
       )}
     </>
   );
