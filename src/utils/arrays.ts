@@ -3,7 +3,7 @@ interface Arr {
   [key: string | number | symbol]: any;
 }
 
-interface mergeArraysByKeyParam<T extends Arr, G extends Arr> {
+interface MergeArraysByKeyParam<T extends Arr, G extends Arr> {
   arr1: T[];
   arr2: G[];
   keyArr1: string | number | symbol;
@@ -23,36 +23,46 @@ export function mergeArraysByKey<T extends Arr, G extends Arr>({
   keyToMarkTheArr1Type = 'type1',
   keyToMarkTheArr2Type = 'type2',
   keyArr2NotInArr1 = 'id',
-}: mergeArraysByKeyParam<T, G>) {
-  const map = arr1.reduce((map, value1) => {
-    return {
-      ...map,
-      [value1[keyArr1]]: {
+}: MergeArraysByKeyParam<T, G>) {
+  // Define the map to merge the two arrays
+  const map: Record<string | number | symbol, T & G> = {};
+
+  // Populate the map with entries from arr1
+  for (const value1 of arr1) {
+    const key = value1[keyArr1];
+    if (key != null) {
+      map[key] = {
         ...value1,
         [keyChildrenName]: [],
         [keyToMarkTheArr1Type]: true,
-      },
-    };
-  }, {} as any);
+      } as unknown as T & G; // Use `unknown` as an intermediate type
+    }
+  }
 
-  arr2.forEach((value2) => {
-    const locationId = value2[keyArr2]; // Get the locationId from asset data
-
-    if (locationId && map[locationId]) {
-      // Attach asset to the correct location
-      map[locationId][keyChildrenName]?.push({
+  // Process arr2 entries
+  for (const value2 of arr2) {
+    const key = value2[keyArr2];
+    if (key != null && map[key]) {
+      // Attach to its parent if found in arr1
+      map[key][keyChildrenName].push({
         ...value2,
         [keyToMarkTheArr2Type]: true,
       });
     } else {
-      // Handle assets that don't belong to any location (if needed)
-      map[value2[keyArr2NotInArr1]] = {
-        ...value2,
-        [keyChildrenName]: [],
-        [keyToMarkTheArr2Type]: true,
-      };
+      // Handle assets that don't belong to any location by treating them as top-level items
+      const fallbackKey = value2[keyArr2NotInArr1];
+      if (fallbackKey != null) {
+        if (!map[fallbackKey]) {
+          map[fallbackKey] = {
+            ...(value2 as unknown as T & G), // Ensure it's merged safely
+            [keyChildrenName]: [],
+            [keyToMarkTheArr2Type]: true,
+          };
+        }
+      }
     }
-  });
+  }
 
+  // Return the merged array
   return Object.values(map);
 }
