@@ -23,7 +23,8 @@ export const SearchInput = styled.input`
 `;
 
 export const TreeItem = styled.button<{ isSelected?: boolean }>`
-  display: flex;
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr 7fr 0.5fr;
   text-align: left;
   padding: 4px 8px;
   width: 100%;

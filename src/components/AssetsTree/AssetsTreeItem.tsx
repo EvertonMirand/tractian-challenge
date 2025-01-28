@@ -24,6 +24,13 @@ export const AssetsTreeItem: React.FC<{
     dispatch(toggleItemOpen(id));
   };
 
+  const { children = [], assets = [] } = child;
+
+  const hasChildren = useMemo(
+    () => children?.length > 0 || assets?.length > 0,
+    [children, assets],
+  );
+
   const leftIcon = useMemo(() => {
     const { isAsset, isLocation, gatewayId } = child;
     if (isLocation) {
@@ -31,7 +38,7 @@ export const AssetsTreeItem: React.FC<{
         alt: 'Location Icon',
         icon: 'location.png',
       };
-    } else if (isAsset && !gatewayId) {
+    } else if (hasChildren || (isAsset && !gatewayId)) {
       return {
         alt: 'Asset Icon',
         icon: 'asset-no-gateway.png',
@@ -41,36 +48,36 @@ export const AssetsTreeItem: React.FC<{
       alt: 'Gateway Icon',
       icon: `blue-asset-gateway.png`,
     };
-  }, [child]);
-
-  const { children = [], assets = [] } = child;
+  }, [child, hasChildren]);
 
   return (
     <>
       <TreeItem
         onClick={() => {
-          if (assets?.length > 0 || children?.length > 0) {
+          if (hasChildren) {
             handleToggle(child.id);
           }
         }}
       >
-        {(children?.length > 0 || assets?.length > 0) && (
-          <Icon alt="Expand Icon" icon="chevron-down.png" />
-        )}
+        <div>
+          {hasChildren && <Icon alt="Expand Icon" icon="chevron-down.png" />}
+        </div>
         <Icon alt={leftIcon.alt} icon={leftIcon.icon} />
         <TreeItemText>{child.name}</TreeItemText>
-
-        {child?.gatewayId &&
-          (child?.status === 'operating' ? (
-            <Icon
-              alt="Energy Sensor Icon"
-              icon="green-thunderbolt.png"
-              height={11}
-              width={11}
-            />
-          ) : (
-            <StatusIndicator status={child?.status} />
-          ))}
+        <div>
+          {!hasChildren &&
+            child?.gatewayId &&
+            (child?.status === 'operating' ? (
+              <Icon
+                alt="Energy Sensor Icon"
+                icon="green-thunderbolt.png"
+                height={11}
+                width={11}
+              />
+            ) : (
+              <StatusIndicator status={child?.status} />
+            ))}
+        </div>
       </TreeItem>
       {openItems[child.id] && (
         <>

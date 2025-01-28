@@ -16,7 +16,6 @@ export const AssetsTree = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state: RootState) => state.locations);
 
-  const filters = useSelector((state: RootState) => state.locations.filters);
   const filteredTree = useSelector((state: RootState) =>
     selectFilteredTree(state),
   );
