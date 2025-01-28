@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   NestedTree,
   StatusIndicator,
@@ -20,9 +20,12 @@ export const AssetsTreeItem: React.FC<{
 
   const { openItems } = useSelector((state: RootState) => state.locations);
 
-  const handleToggle = (id: string) => {
-    dispatch(toggleItemOpen(id));
-  };
+  const handleToggle = useCallback(
+    (id: string) => {
+      dispatch(toggleItemOpen(id));
+    },
+    [dispatch],
+  );
 
   const { children = [], assets = [] } = child;
 
@@ -50,15 +53,16 @@ export const AssetsTreeItem: React.FC<{
     };
   }, [child, hasChildren]);
 
+  const onClick = useCallback(() => {
+    if (hasChildren) {
+      handleToggle(child.id);
+    } else {
+    }
+  }, [child.id, handleToggle, hasChildren]);
+
   return (
     <>
-      <TreeItem
-        onClick={() => {
-          if (hasChildren) {
-            handleToggle(child.id);
-          }
-        }}
-      >
+      <TreeItem onClick={onClick}>
         <div>
           {hasChildren && <Icon alt="Expand Icon" icon="chevron-down.png" />}
         </div>

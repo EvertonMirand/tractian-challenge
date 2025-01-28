@@ -1,5 +1,5 @@
 import { Asset } from '@/types/assets';
-import { Location } from '@/types/location';
+
 import { baseUrl } from '@/utils/endpoint.utils';
 import { buildTree } from '@/utils/tree';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';

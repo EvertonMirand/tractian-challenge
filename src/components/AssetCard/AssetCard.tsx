@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+
 import {
   Card,
   Header,
@@ -10,7 +10,7 @@ import {
   SensorSection,
   Status,
 } from './AssetCard.styled';
-import Image from 'next/image';
+
 import { Icon } from '../global/Icon';
 
 export const AssetCard = () => {
@@ -41,5 +41,3 @@ export const AssetCard = () => {
     </Card>
   );
 };
-
-

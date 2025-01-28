@@ -27,9 +27,12 @@ export const AssetsTree = () => {
     500,
   );
 
-  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    debounceHandleSearch(e);
-  }, []);
+  const handleSearch = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      debounceHandleSearch(e);
+    },
+    [debounceHandleSearch],
+  );
 
   const { selectedCompany } = useSelector(
     (state: RootState) => state.companies,
@@ -56,7 +59,7 @@ export const AssetsTree = () => {
       refetchLocations();
       refetchAssets();
     }
-  }, [selectedCompany, dispatch]);
+  }, [selectedCompany, refetchLocations, refetchAssets]);
 
   if (isErrorLocation || isErrorAssets) {
     return <p>Could not fetch locations or assets</p>;

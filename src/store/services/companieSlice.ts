@@ -1,5 +1,5 @@
-import { Company } from "@/types/company";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Company } from '@/types/company';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface SelectedCompanyState {
   selectedCompany?: Company; // Store the full company object
@@ -10,7 +10,7 @@ const initialState: SelectedCompanyState = {
 };
 
 const companySlice = createSlice({
-  name: "company",
+  name: 'company',
   initialState,
   reducers: {
     selectCompany: (state, action: PayloadAction<Company>) => {

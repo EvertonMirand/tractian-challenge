@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface Arr {
   [key: string | number | symbol]: any;
 }

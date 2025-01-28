@@ -1,1 +1,1 @@
-export const baseUrl = "https://fake-api.tractian.com/" 
+export const baseUrl = 'https://fake-api.tractian.com/';

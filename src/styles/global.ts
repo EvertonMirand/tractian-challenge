@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { theme } from "./theme";
+import { createGlobalStyle } from 'styled-components';
+import { theme } from './theme';
 
 export const GlobalStyle = createGlobalStyle`
   /* Reset Styles */
@@ -13,7 +13,7 @@ export const GlobalStyle = createGlobalStyle`
   /* Base Styles */
   html, body {
     font-family: ${theme.fonts.fontFamily}; 
-    background: ${(props)=>props.theme.colors.bodyBackground};
+    background: ${(props) => props.theme.colors.bodyBackground};
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
