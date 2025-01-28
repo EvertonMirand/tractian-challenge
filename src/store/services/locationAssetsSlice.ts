@@ -17,10 +17,11 @@ export interface LocationAssetsState {
   locations: Location[];
   assets: Location[];
   loading: boolean;
-  error?: string;
   openItems: { [id: string]: boolean };
-  locationTree?: LocationAsset[];
   filters: LocationAssetsFilters;
+  error?: string;
+  locationTree?: LocationAsset[];
+  selectedAsset?: LocationAsset;
   isLocationsLoading?: boolean; // Track loading state for locations
   isAssetsLoading?: boolean; // Track loading state for assets
   isLocationsLoaded?: boolean; // Flag to check if locations are loaded
@@ -49,6 +50,9 @@ const locationAssetsSlice = createSlice({
     },
     setLocations: (state, action: PayloadAction<Location[]>) => {
       state.locations = action.payload;
+    },
+    setSelectedAsset: (state, action: PayloadAction<LocationAsset>) => {
+      state.selectedAsset = action.payload;
     },
     setAssets: (state, action: PayloadAction<Asset[]>) => {
       state.assets = action.payload;
@@ -141,6 +145,7 @@ export const {
   setLocationTree,
   toggleItemOpen,
   setFilters,
+  setSelectedAsset,
 } = locationAssetsSlice.actions;
 
 export { locationAssetsSlice };

@@ -12,6 +12,8 @@ export default function Home() {
     (state: RootState) => state?.companies ?? {},
   );
 
+  const { selectedAsset } = useSelector((state: RootState) => state.locations);
+
   return (
     <div>
       {selectedCompany && (
@@ -19,7 +21,7 @@ export default function Home() {
           <AssetsHeader />
           <AssetsCardsContainer>
             <AssetsTree />
-            <AssetCard />
+            {selectedAsset && <AssetCard />}
           </AssetsCardsContainer>
         </BackgroundCardContainer>
       )}

@@ -22,12 +22,16 @@ export const SearchInput = styled.input`
   width: 100%;
 `;
 
-export const TreeItem = styled.button<{ isSelected?: boolean }>`
+interface TreeItemProps {
+  isSelected?: boolean;
+}
+
+export const TreeItem = styled.button<TreeItemProps>`
   display: grid;
-  grid-template-columns: 0.5fr 0.5fr 7fr 0.5fr;
+  grid-template-columns: 0.5fr 0.5fr 6fr 0.5fr;
   text-align: left;
   padding: 4px 8px;
-  width: 100%;
+  width: 90%;
   margin-left: ${({ isSelected }) => (isSelected ? '16px' : '8px')};
   background-color: ${({ isSelected }) =>
     isSelected ? '#1e90ff' : 'transparent'};
@@ -41,7 +45,7 @@ export const TreeItem = styled.button<{ isSelected?: boolean }>`
   }
 `;
 
-export const TreeItemText = styled.span`
+export const TreeItemText = styled.span<TreeItemProps>`
   font-size: 14px;
   flex: 1;
 `;
@@ -54,7 +58,7 @@ export const StatusIndicator = styled.span<{
   border-radius: 50%;
   margin-left: 8px;
 
-  background-color: ${({ status }) => (status === 'alert' ? 'red' : 'green')};
+  background: ${({ status }) => (status === 'alert' ? 'red' : 'green')};
 `;
 
 export const TreeContainer = styled.div`

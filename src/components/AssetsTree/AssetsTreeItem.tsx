@@ -1,24 +1,25 @@
 import React, { useCallback, useMemo } from 'react';
-import {
-  NestedTree,
-  StatusIndicator,
-  TreeItem,
-  TreeItemText,
-} from './AssetsTree.styled';
+import { NestedTree, TreeItem, TreeItemText } from './AssetsTree.styled';
 import { Location } from '@/types/location';
 
 import { Icon } from '../global/Icon';
 import { useDispatch, useSelector } from 'react-redux';
 import { LocationAsset } from '@/types/mergedLocationAssets';
-import { toggleItemOpen } from '@/store/services/locationAssetsSlice';
+import {
+  setSelectedAsset,
+  toggleItemOpen,
+} from '@/store/services/locationAssetsSlice';
 import { RootState } from '@/store/store';
+import { AssetStatus } from '../Asset/AssetStatus';
 
 export const AssetsTreeItem: React.FC<{
   child: LocationAsset;
 }> = ({ child }) => {
   const dispatch = useDispatch();
 
-  const { openItems } = useSelector((state: RootState) => state.locations);
+  const { openItems, selectedAsset } = useSelector(
+    (state: RootState) => state.locations,
+  );
 
   const handleToggle = useCallback(
     (id: string) => {
@@ -32,6 +33,11 @@ export const AssetsTreeItem: React.FC<{
   const hasChildren = useMemo(
     () => children?.length > 0 || assets?.length > 0,
     [children, assets],
+  );
+
+  const isSelected = useMemo(
+    () => selectedAsset?.id === child.id,
+    [selectedAsset, child],
   );
 
   const leftIcon = useMemo(() => {
@@ -49,38 +55,28 @@ export const AssetsTreeItem: React.FC<{
     }
     return {
       alt: 'Gateway Icon',
-      icon: `blue-asset-gateway.png`,
+      icon: `${isSelected ? 'white' : 'blue'}-asset-gateway.png`,
     };
-  }, [child, hasChildren]);
+  }, [child, hasChildren, isSelected]);
 
   const onClick = useCallback(() => {
     if (hasChildren) {
       handleToggle(child.id);
-    } else {
+    } else if (!hasChildren && child?.gatewayId) {
+      dispatch(setSelectedAsset(child));
     }
-  }, [child.id, handleToggle, hasChildren]);
+  }, [child, dispatch, handleToggle, hasChildren]);
 
   return (
     <>
-      <TreeItem onClick={onClick}>
+      <TreeItem onClick={onClick} isSelected={isSelected}>
         <div>
           {hasChildren && <Icon alt="Expand Icon" icon="chevron-down.png" />}
         </div>
         <Icon alt={leftIcon.alt} icon={leftIcon.icon} />
         <TreeItemText>{child.name}</TreeItemText>
         <div>
-          {!hasChildren &&
-            child?.gatewayId &&
-            (child?.status === 'operating' ? (
-              <Icon
-                alt="Energy Sensor Icon"
-                icon="green-thunderbolt.png"
-                height={11}
-                width={11}
-              />
-            ) : (
-              <StatusIndicator status={child?.status} />
-            ))}
+          {!hasChildren && child?.gatewayId && <AssetStatus asset={child} />}
         </div>
       </TreeItem>
       {openItems[child.id] && (

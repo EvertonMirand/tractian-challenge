@@ -18,4 +18,5 @@ export const AssetsCardsContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 8px;
+  margin-top: 10px;
 `;

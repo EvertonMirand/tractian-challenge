@@ -7,19 +7,30 @@ import {
   InfoSection,
   Label,
   SensorItem,
+  SensorItemTitle,
+  SensorItemValue,
   SensorSection,
-  Status,
 } from './AssetCard.styled';
 
 import { Icon } from '../global/Icon';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
+import { AssetStatus } from '../Asset/AssetStatus';
+
+const sensorTypeName: { [key: string]: string } = {
+  energy: 'Eletric',
+  vibration: 'Mecanic',
+};
 
 export const AssetCard = () => {
+  const { selectedAsset } = useSelector((state: RootState) => state.locations);
+
   return (
     <Card>
       <Header>
-        MOTOR RT COAL AF01 <Status />
+        {selectedAsset?.name} <AssetStatus asset={selectedAsset} />
       </Header>
-      {/* <Image src="/path-to-image.jpg" alt="Equipment" /> */}
+
       <InfoSection>
         <InfoBlock>
           <Label>Tipo de Equipamento</Label>
@@ -27,15 +38,27 @@ export const AssetCard = () => {
         </InfoBlock>
         <InfoBlock>
           <Label>Responsáveis</Label>
-          <span>Elétrica</span>
+          <span>{sensorTypeName[selectedAsset?.sensorType ?? ''] ?? ''}</span>
         </InfoBlock>
       </InfoSection>
       <SensorSection>
         <SensorItem>
-          <Icon alt="Sensor Icon" icon="sensor.png" /> HIO4510
+          <SensorItemTitle>
+            <Icon alt="Sensor Icon" icon="sensor.png" />
+            <p>Sensor </p>
+          </SensorItemTitle>
+          <SensorItemValue status={selectedAsset?.status}>
+            {selectedAsset?.sensorId ?? ''}
+          </SensorItemValue>
         </SensorItem>
         <SensorItem>
-          <Icon alt="Receptor Icon" icon="receptor.png" /> EUH4R27
+          <SensorItemTitle>
+            <Icon alt="Gateway Icon" icon="receptor.png" /> <p>Gateway </p>
+          </SensorItemTitle>
+
+          <SensorItemValue status={selectedAsset?.status}>
+            {selectedAsset?.gatewayId ?? ''}
+          </SensorItemValue>
         </SensorItem>
       </SensorSection>
     </Card>

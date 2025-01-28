@@ -78,9 +78,7 @@ export const AssetsTree = () => {
 
       <TreeContainer>
         {filteredTree?.map((location) => (
-          <>
-            <AssetsTreeItem key={location.id} child={location} />
-          </>
+          <AssetsTreeItem key={location.id} child={location} />
         ))}
       </TreeContainer>
     </Container>

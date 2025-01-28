@@ -1,4 +1,7 @@
+import { AssetStatus } from '@/types/assets';
+import { darkenColor } from '@/utils/colors';
 import styled from 'styled-components';
+
 export const Card = styled.div`
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -32,6 +35,7 @@ export const Image = styled.img`
 export const InfoSection = styled.div`
   margin-top: 16px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 `;
 
@@ -46,12 +50,27 @@ export const Label = styled.span`
 
 export const SensorSection = styled.div`
   margin-top: 16px;
-  display: flex;
-  justify-content: space-between;
+  gap: 20px;
+  width: 500px;
 `;
 
 export const SensorItem = styled.div`
+  align-items: center;
+  gap: 8px;
+`;
+
+export const SensorItemTitle = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+
+  p {
+    font-weight: 600;
+    color: #2188ff;
+  }
+`;
+
+export const SensorItemValue = styled.p<{ status?: AssetStatus }>`
+  color: ${({ status }) =>
+    darkenColor(status === 'operating' ? '#52C41A' : '#ED3833', 20)};
 `;
