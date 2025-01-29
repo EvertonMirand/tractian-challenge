@@ -26,7 +26,7 @@ export const AssetCard = () => {
   const { selectedAsset } = useSelector((state: RootState) => state.locations);
 
   return (
-    <Card>
+    <Card data-testid={`asset-card-${selectedAsset?.id ?? ''}`}>
       <Header>
         {selectedAsset?.name} <AssetStatus asset={selectedAsset} />
       </Header>

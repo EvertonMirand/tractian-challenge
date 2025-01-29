@@ -74,6 +74,7 @@ export const AssetsTree = () => {
       <SearchInput
         placeholder="Buscar Ativo ou Local"
         onChange={handleSearch}
+        data-testid={`search`}
       />
 
       <TreeContainer>

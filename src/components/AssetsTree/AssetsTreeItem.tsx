@@ -69,9 +69,19 @@ export const AssetsTreeItem: React.FC<{
 
   return (
     <>
-      <TreeItem onClick={onClick} isSelected={isSelected}>
+      <TreeItem
+        onClick={onClick}
+        isSelected={isSelected}
+        data-testid={`tree-item-${child.id}`}
+      >
         <div>
-          {hasChildren && <Icon alt="Expand Icon" icon="chevron-down.png" />}
+          {hasChildren && (
+            <Icon
+              data-testid={`expand-item-${child.id}`}
+              alt="Expand Icon"
+              icon="chevron-down.png"
+            />
+          )}
         </div>
         <Icon alt={leftIcon.alt} icon={leftIcon.icon} />
         <TreeItemText>{child.name}</TreeItemText>
@@ -81,13 +91,13 @@ export const AssetsTreeItem: React.FC<{
       </TreeItem>
       {openItems[child.id] && (
         <>
-          <NestedTree>
+          <NestedTree data-testid={`nested-tree-${child.id}`}>
             {child.children?.map((child) => (
               <AssetsTreeItem key={child.id} child={child} />
             ))}
           </NestedTree>
           {!child?.isAsset && (
-            <NestedTree>
+            <NestedTree data-testid={`nested-tree-${child.id}`}>
               {(child as Location)?.assets?.map((asset) => (
                 <AssetsTreeItem key={asset.id} child={asset} />
               ))}

@@ -5,14 +5,13 @@ import userEvent from '@testing-library/user-event';
 import { Header } from '@/components/header/Header';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
-import { createStore } from '@/store/store'; // Adjust path
-// Adjust path
+import { createStore } from '@/store/store';
+
 import { useGetCompaniesQuery } from '@/store/services/companiesApi';
 
 import { Company } from '@/types/company';
 import { theme } from '@/styles/theme';
 
-// Mock RTK Query Hook
 jest.mock('@/store/services/companiesApi', () => ({
   ...jest.requireActual('@/store/services/companiesApi'),
   useGetCompaniesQuery: jest.fn(),

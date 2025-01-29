@@ -40,6 +40,7 @@ export const Header = () => {
             <UnitButton
               key={company.id}
               isActive={selectedCompany?.id === company.id}
+              data-testid={`unit-button-${company.id}`}
               onClick={() => {
                 if (selectedCompany?.id !== company.id) {
                   debouncedSetCompanyId(company);
