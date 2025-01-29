@@ -7,22 +7,24 @@ import { assetsApi } from './services/assetsApi';
 import { locationsApi } from './services/locationApi';
 import { locationAssetsReducer } from './services/locationAssetsSlice';
 
-export const store = configureStore({
-  reducer: {
-    [companiesApi.reducerPath]: companiesApi.reducer,
-    [assetsApi.reducerPath]: assetsApi.reducer,
-    [locationsApi.reducerPath]: locationsApi.reducer,
-    locations: locationAssetsReducer,
-    companies: companiesReducer,
-  },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
-      companiesApi.middleware,
-      assetsApi.middleware,
-      locationsApi.middleware,
-    ),
-});
+export const createStore = () =>
+  configureStore({
+    reducer: {
+      [companiesApi.reducerPath]: companiesApi.reducer,
+      [assetsApi.reducerPath]: assetsApi.reducer,
+      [locationsApi.reducerPath]: locationsApi.reducer,
+      locations: locationAssetsReducer,
+      companies: companiesReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(
+        companiesApi.middleware,
+        assetsApi.middleware,
+        locationsApi.middleware,
+      ),
+  });
 
+export const store = createStore(); // Default export for app use
 setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;

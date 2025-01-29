@@ -24,6 +24,7 @@ export const Header = () => {
   return (
     <HeaderContainer>
       <Image
+        data-testid="tractian-logo"
         src="/images/logo-tractian.png"
         alt="Tractian Logo"
         width={100}
