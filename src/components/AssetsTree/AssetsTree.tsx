@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Container, SearchInput, TreeContainer } from './AssetsTree.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
@@ -14,6 +14,7 @@ import debounce from 'lodash.debounce';
 
 export const AssetsTree = () => {
   const dispatch = useDispatch();
+  const [textFilter, setTextFilter] = useState('');
   const { loading, isAssetsLoading, isLocationsLoading } = useSelector(
     (state: RootState) => state.locations,
   );
@@ -22,19 +23,17 @@ export const AssetsTree = () => {
     selectFilteredTree(state),
   );
 
-  const debounceHandleSearch = debounce(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(setFilters({ name: e.target.value }));
-    },
-    500,
-  );
+  const debounceHandleSearch = debounce((text: string) => {
+    dispatch(setFilters({ name: text }));
+  }, 500);
 
-  const handleSearch = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      debounceHandleSearch(e);
-    },
-    [debounceHandleSearch],
-  );
+  useEffect(() => {
+    debounceHandleSearch(textFilter);
+  }, [debounceHandleSearch, textFilter]);
+
+  const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTextFilter(e.target.value);
+  }, []);
 
   const { selectedCompany } = useSelector(
     (state: RootState) => state.companies,
@@ -73,6 +72,7 @@ export const AssetsTree = () => {
         placeholder="Buscar Ativo ou Local"
         onChange={handleSearch}
         data-testid={`search`}
+        value={textFilter}
       />
 
       <TreeContainer>

@@ -27,24 +27,19 @@ export const selectFilteredTree = createSelector(
           const filteredChildren = node.children
             ? filterTree(node.children)
             : [];
-
           const filteredAssets = node.assets ? filterTree(node.assets) : [];
 
-          if (
-            matchesNodeFilter(node) ||
-            filteredChildren.length > 0 ||
-            filteredAssets.length > 0
-          ) {
-            return {
-              ...node,
-              children: filteredChildren,
-              assets: filteredAssets,
-            };
+          const nodeMatches = matchesNodeFilter(node);
+          const hasMatchingDescendants =
+            filteredChildren.length > 0 || filteredAssets.length > 0;
+
+          if (nodeMatches || hasMatchingDescendants) {
+            return node;
           }
 
           return null;
         })
-        .filter((node) => node !== null) as LocationAsset[];
+        .filter(Boolean) as LocationAsset[];
     };
 
     return filterTree(locationTree);
