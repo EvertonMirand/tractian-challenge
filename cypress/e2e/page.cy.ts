@@ -13,7 +13,7 @@ describe('Page Interaction', () => {
         cy.wrap($treeItem).click();
 
         const treeItemTestId = $treeItem.attr('data-testid');
-        const nestedTreeTestId = treeItemTestId.replace(
+        const nestedTreeTestId = treeItemTestId?.replace(
           'tree-item-',
           'nested-tree-',
         );
