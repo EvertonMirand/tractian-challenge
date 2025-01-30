@@ -17,12 +17,10 @@ jest.mock('@/store/services/companiesApi', () => ({
   useGetCompaniesQuery: jest.fn(),
 }));
 
-// Mock lodash debounce to execute instantly
 jest.mock('lodash.debounce', () => (fn: any) => fn);
 
 const renderWithProviders = (ui: React.ReactElement) => {
-  const store = createStore(); // Use a fresh store for each test
-
+  const store = createStore();
   return render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>{ui}</ThemeProvider>
@@ -47,7 +45,6 @@ describe('Header Component', () => {
   it('renders the header correctly', () => {
     renderWithProviders(<Header />);
 
-    // Check if logo exists
     const logo = screen.getByTestId('tractian-logo');
     expect(logo).toBeInTheDocument();
   });
@@ -83,7 +80,7 @@ describe('Header Component', () => {
   });
 
   it('selects a company when clicked', async () => {
-    const store = createStore(); // Use a fresh store
+    const store = createStore();
     render(
       <Provider store={store}>
         <ThemeProvider theme={theme}>
@@ -97,7 +94,6 @@ describe('Header Component', () => {
 
     await user.click(companyButton);
 
-    // Verify state was updated
     expect(store.getState().companies.selectedCompany).toEqual(
       mockCompanies[0],
     );

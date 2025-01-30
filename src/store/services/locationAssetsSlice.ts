@@ -22,10 +22,10 @@ export interface LocationAssetsState {
   error?: string;
   locationTree?: LocationAsset[];
   selectedAsset?: LocationAsset;
-  isLocationsLoading?: boolean; // Track loading state for locations
-  isAssetsLoading?: boolean; // Track loading state for assets
-  isLocationsLoaded?: boolean; // Flag to check if locations are loaded
-  isAssetsLoaded?: boolean; // Flag to check if assets are loaded
+  isLocationsLoading?: boolean;
+  isAssetsLoading?: boolean;
+  isLocationsLoaded?: boolean;
+  isAssetsLoaded?: boolean;
 }
 
 export const initialState: LocationAssetsState = {
@@ -75,21 +75,19 @@ const locationAssetsSlice = createSlice({
         locationsApi.endpoints.getLocations.matchFulfilled,
         (state, action) => {
           state.locations = action.payload;
-          state.isLocationsLoaded = true; // Mark locations as loaded
+          state.isLocationsLoaded = true;
         },
       )
       .addMatcher(
         assetsApi.endpoints.getAssets.matchFulfilled,
         (state, action) => {
           state.assets = action.payload;
-          state.isAssetsLoaded = true; // Mark assets as loaded
+          state.isAssetsLoaded = true;
         },
       )
       .addMatcher(
         (action) => action.type.endsWith('fulfilled'),
         (state) => {
-          console.log('oi');
-          // Check if both are loaded
           if (state.isLocationsLoaded && state.isAssetsLoaded) {
             state.loading = true;
             const merged = mergeArraysByKey({
@@ -107,7 +105,6 @@ const locationAssetsSlice = createSlice({
             state.loading = false;
             state.locationTree = tree;
 
-            // Optionally reset the flags if you want to reload data again later
             state.isLocationsLoaded = false;
             state.isAssetsLoaded = false;
           }

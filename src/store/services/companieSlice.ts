@@ -2,11 +2,11 @@ import { Company } from '@/types/company';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface SelectedCompanyState {
-  selectedCompany?: Company; // Store the full company object
+  selectedCompany?: Company;
 }
 
 const initialState: SelectedCompanyState = {
-  selectedCompany: undefined, // Default to no company selected
+  selectedCompany: undefined, 
 };
 
 const companySlice = createSlice({

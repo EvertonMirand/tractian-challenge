@@ -11,8 +11,6 @@ import { RootState } from '@/store/store';
 import { AssetStatus } from '@/types/assets';
 import { setFilters } from '@/store/services/locationAssetsSlice';
 
-// import { Container } from './styles';
-
 const AssetsHeader: React.FC = () => {
   const { selectedCompany } = useSelector(
     (state: RootState) => state?.companies ?? {},

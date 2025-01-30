@@ -24,7 +24,7 @@ export const createStore = () =>
       ),
   });
 
-export const store = createStore(); // Default export for app use
+export const store = createStore();
 setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;
