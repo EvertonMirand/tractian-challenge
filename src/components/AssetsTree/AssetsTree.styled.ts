@@ -5,20 +5,20 @@ export const Container = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 400px;
-  padding: 8px;
+  padding: ${({ theme }) => theme.spacing.sm};
   gap: 5px;
-  font-family: Arial, sans-serif;
+  font-family: ${({ theme }) => theme.fonts.fontFamily};
   height: 100%;
   border: 1px solid ${({ theme }) => theme.colors.borderCard};
   border-radius: 2px;
 `;
 
 export const SearchInput = styled.input`
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 16px;
-  font-size: 14px;
+  padding: ${({ theme }) => theme.spacing.sm};
+  border: 1px solid ${({ theme }) => theme.colors.grayLight};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  margin-bottom: ${({ theme }) => theme.spacing.lg};
+  font-size: ${({ theme }) => theme.fonts.fontSize.sm};
   width: 100%;
 `;
 
@@ -30,23 +30,24 @@ export const TreeItem = styled.button<TreeItemProps>`
   display: grid;
   grid-template-columns: 0.5fr 0.5fr 6fr 0.5fr;
   text-align: left;
-  padding: 4px 8px;
+  padding: ${({ theme }) => `${theme.spacing.xs} ${theme.spacing.sm}`};
   width: 90%;
   margin-left: ${({ isSelected }) => (isSelected ? '16px' : '8px')};
-  background-color: ${({ isSelected }) =>
-    isSelected ? '#1e90ff' : 'transparent'};
-  color: ${({ isSelected }) => (isSelected ? '#fff' : '#000')};
-  border-radius: 4px;
+  background-color: ${({ theme, isSelected }) =>
+    isSelected ? theme.colors.selectedBlue : 'transparent'};
+  color: ${({ theme, isSelected }) =>
+    isSelected ? theme.colors.white : theme.colors.black};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
   cursor: pointer;
 
   &:hover {
-    background-color: ${({ isSelected }) =>
-      isSelected ? '#1c7ed6' : '#f0f0f0'};
+    background-color: ${({ theme, isSelected }) =>
+      isSelected ? theme.colors.primaryDark : theme.colors.grayHover};
   }
 `;
 
 export const TreeItemText = styled.span<TreeItemProps>`
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.fonts.fontSize.sm};
   flex: 1;
 `;
 
@@ -56,9 +57,9 @@ export const StatusIndicator = styled.span<{
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  margin-left: 8px;
-
-  background: ${({ status }) => (status === 'alert' ? 'red' : 'green')};
+  margin-left: ${({ theme }) => theme.spacing.sm};
+  background: ${({ theme, status }) =>
+    status === 'alert' ? theme.colors.danger : theme.colors.success};
 `;
 
 export const TreeContainer = styled.div`
@@ -67,5 +68,5 @@ export const TreeContainer = styled.div`
 `;
 
 export const NestedTree = styled.div`
-  margin-left: 16px;
+  margin-left: ${({ theme }) => theme.spacing.lg};
 `;

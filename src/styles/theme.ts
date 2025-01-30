@@ -12,7 +12,10 @@ export const theme = {
     dark: '#212529',
     white: '#FFFFFF',
     black: '#000000',
-    // Custom colors
+    selectedBlue: '#1e90ff',
+    primaryDark: '#1c7ed6',
+    grayHover: '#f0f0f0',
+    grayLight: '#cccccc',
     background: '#F4F5F7',
     cardBackground: '#FFFFFF',
     text: '#212529',
