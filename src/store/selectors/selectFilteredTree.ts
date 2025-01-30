@@ -34,7 +34,12 @@ export const selectFilteredTree = createSelector(
             filteredChildren.length > 0 || filteredAssets.length > 0;
 
           if (nodeMatches || hasMatchingDescendants) {
-            return node;
+            return {
+              ...node,
+              // remove children and assets if you want to keep them not filtered and the full tree
+              children: filteredChildren,
+              assets: filteredAssets,
+            } as LocationAsset;
           }
 
           return null;
