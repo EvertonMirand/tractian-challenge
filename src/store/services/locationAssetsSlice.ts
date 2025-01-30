@@ -58,7 +58,6 @@ const locationAssetsSlice = createSlice({
       state.assets = action.payload;
     },
     setLocationTree: (state, action: PayloadAction<LocationAsset[]>) => {
-      console.log('Updating Tree in State:', action.payload);
       state.locationTree = action.payload;
     },
     toggleItemOpen: (state, action: PayloadAction<string>) => {
@@ -76,6 +75,7 @@ const locationAssetsSlice = createSlice({
         (state, action) => {
           state.locations = action.payload;
           state.isLocationsLoaded = true;
+          state.isLocationsLoading = false;
         },
       )
       .addMatcher(
@@ -83,13 +83,13 @@ const locationAssetsSlice = createSlice({
         (state, action) => {
           state.assets = action.payload;
           state.isAssetsLoaded = true;
+          state.isAssetsLoading = false;
         },
       )
       .addMatcher(
         (action) => action.type.endsWith('fulfilled'),
         (state) => {
           if (state.isLocationsLoaded && state.isAssetsLoaded) {
-            state.loading = true;
             const merged = mergeArraysByKey({
               arr1: state.locations,
               arr2: state.assets,
@@ -102,19 +102,21 @@ const locationAssetsSlice = createSlice({
             }) as LocationAsset[];
 
             const tree = buildTree(merged);
-            state.loading = false;
+
             state.locationTree = tree;
 
             state.isLocationsLoaded = false;
             state.isAssetsLoaded = false;
+            // Defer turning off loading to ensure UI sees it
           }
+          state.loading = false;
         },
       )
       .addMatcher(locationsApi.endpoints.getLocations.matchPending, (state) => {
         state.isLocationsLoading = true;
         state.isLocationsLoaded = false;
+        state.loading = true;
       })
-
       .addMatcher(
         locationsApi.endpoints.getLocations.matchRejected,
         (state, action) => {
@@ -124,6 +126,7 @@ const locationAssetsSlice = createSlice({
       )
       .addMatcher(assetsApi.endpoints.getAssets.matchPending, (state) => {
         state.isAssetsLoading = true;
+        state.isAssetsLoaded = false;
       })
 
       .addMatcher(

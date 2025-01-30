@@ -14,7 +14,9 @@ import debounce from 'lodash.debounce';
 
 export const AssetsTree = () => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state: RootState) => state.locations);
+  const { loading, isAssetsLoading, isLocationsLoading } = useSelector(
+    (state: RootState) => state.locations,
+  );
 
   const filteredTree = useSelector((state: RootState) =>
     selectFilteredTree(state),
@@ -38,21 +40,17 @@ export const AssetsTree = () => {
     (state: RootState) => state.companies,
   );
 
-  const {
-    refetch: refetchLocations,
-    isError: isErrorLocation,
-    isLoading: isLocationsLoading,
-  } = useGetLocationsQuery(selectedCompany?.id ?? '', {
-    skip: !selectedCompany?.id,
-  });
+  const { refetch: refetchLocations, isError: isErrorLocation } =
+    useGetLocationsQuery(selectedCompany?.id ?? '', {
+      skip: !selectedCompany?.id,
+    });
 
-  const {
-    refetch: refetchAssets,
-    isError: isErrorAssets,
-    isLoading: isLoadingAssets,
-  } = useGetAssetsQuery(selectedCompany?.id ?? '', {
-    skip: !selectedCompany?.id,
-  });
+  const { refetch: refetchAssets, isError: isErrorAssets } = useGetAssetsQuery(
+    selectedCompany?.id ?? '',
+    {
+      skip: !selectedCompany?.id,
+    },
+  );
 
   useEffect(() => {
     if (selectedCompany?.id) {
@@ -61,12 +59,12 @@ export const AssetsTree = () => {
     }
   }, [selectedCompany, refetchLocations, refetchAssets]);
 
-  if (isErrorLocation || isErrorAssets) {
-    return <p>Could not fetch locations or assets</p>;
+  if (isAssetsLoading || isLocationsLoading || loading) {
+    return <p>Loading...</p>;
   }
 
-  if (isLoadingAssets || isLocationsLoading || loading) {
-    return <p>Loading...</p>;
+  if (isErrorLocation || isErrorAssets || !filteredTree.length) {
+    return <p>Could not fetch locations or assets</p>;
   }
 
   return (
