@@ -6,7 +6,7 @@ export interface SelectedCompanyState {
 }
 
 const initialState: SelectedCompanyState = {
-  selectedCompany: undefined, 
+  selectedCompany: undefined,
 };
 
 const companySlice = createSlice({
