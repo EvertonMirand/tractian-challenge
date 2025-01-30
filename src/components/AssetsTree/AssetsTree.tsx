@@ -63,7 +63,7 @@ export const AssetsTree = () => {
     return <p>Loading...</p>;
   }
 
-  if (isErrorLocation || isErrorAssets || !filteredTree.length) {
+  if (isErrorLocation || isErrorAssets) {
     return <p>Could not fetch locations or assets</p>;
   }
 
