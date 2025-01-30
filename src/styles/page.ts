@@ -11,7 +11,7 @@ export const BackgroundCardContainer = styled.div`
   border-radius: 4px 0px 0px 0px;
   border: 1px 0px 0px 0px;
   opacity: 0px;
-  background: #fff;
+  background: ${(props) => props.theme.colors.white};
 `;
 
 export const AssetsCardsContainer = styled.div`

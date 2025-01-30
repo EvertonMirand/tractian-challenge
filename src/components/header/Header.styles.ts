@@ -4,9 +4,9 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1a1b27;
+  background-color: ${(props) => props.theme.colors.headerBackground};
   padding: 16px 32px;
-  color: white;
+  color: ${(props) => props.theme.colors.white};
 `;
 
 export const Logo = styled.div`
@@ -37,13 +37,22 @@ export const UnitButton = styled.button.withConfig({
   border-radius: 4px;
   border: none;
   cursor: pointer;
-  background-color: ${(props) => (props.isActive ? '#2E93FF' : '#162447')};
-  color: ${(props) => (props.isActive ? '#FFFFFF' : '#A9A9A9')};
+  background-color: ${(props) =>
+    props.isActive
+      ? props.theme.colors.buttonActive
+      : props.theme.colors.buttonInactive};
+  color: ${(props) =>
+    props.isActive
+      ? props.theme.colors.buttonTextActive
+      : props.theme.colors.buttonTextInactive};
   box-shadow: ${(props) =>
-    props.isActive ? '0 4px 6px rgba(46, 147, 255, 0.4)' : 'none'};
+    props.isActive ? `0 4px 6px ${props.theme.colors.buttonShadow}` : 'none'};
   transition: all 0.3s;
 
   &:hover {
-    background-color: ${(props) => (props.isActive ? '#2E93FF' : '#1C2B3A')};
+    background-color: ${(props) =>
+      props.isActive
+        ? props.theme.colors.buttonActive
+        : props.theme.colors.buttonHover};
   }
 `;

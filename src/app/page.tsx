@@ -5,6 +5,7 @@ import AssetsHeader from '@/components/AssetsHeader/AssetsHeader';
 import { AssetsTree } from '@/components/AssetsTree/AssetsTree';
 import { RootState } from '@/store/store';
 import { AssetsCardsContainer, BackgroundCardContainer } from '@/styles/page';
+import Head from 'next/head';
 import { useSelector } from 'react-redux';
 
 export default function Home() {
@@ -18,6 +19,11 @@ export default function Home() {
     <div>
       {selectedCompany && (
         <BackgroundCardContainer>
+          <Head>
+            <title>
+              {selectedCompany ? `${selectedCompany.name} - Dashboard` : 'Home'}
+            </title>
+          </Head>
           <AssetsHeader />
           <AssetsCardsContainer>
             <AssetsTree />

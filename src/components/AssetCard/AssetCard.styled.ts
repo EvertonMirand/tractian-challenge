@@ -3,10 +3,10 @@ import { darkenColor } from '@/utils/colors';
 import styled from 'styled-components';
 
 export const Card = styled.div`
-  border: 1px solid #e0e0e0;
+  border: 1px solid ${(props) => props.theme.colors.borderCard};
   border-radius: 8px;
   padding: 16px;
-  background: #fff;
+  background: ${(props) => props.theme.colors.cardBackground};
   display: flex;
   flex-direction: column;
 `;
@@ -23,7 +23,7 @@ export const Status = styled.span`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: green;
+  background: ${(props) => props.theme.colors.statusOperating};
 `;
 
 export const Image = styled.img`
@@ -66,11 +66,16 @@ export const SensorItemTitle = styled.div`
 
   p {
     font-weight: 600;
-    color: #2188ff;
+    color: ${(props) => props.theme.colors.sensorTitle};
   }
 `;
 
 export const SensorItemValue = styled.p<{ status?: AssetStatus }>`
-  color: ${({ status }) =>
-    darkenColor(status === 'operating' ? '#52C41A' : '#ED3833', 20)};
+  color: ${({ status, theme }) =>
+    darkenColor(
+      status === 'operating'
+        ? theme.colors.statusOperating
+        : theme.colors.statusError,
+      20,
+    )};
 `;
