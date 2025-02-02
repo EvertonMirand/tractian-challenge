@@ -1,4 +1,4 @@
-interface TreeStructure {
+export interface TreeStructure {
   id: string;
   parentId?: string;
   children?: TreeStructure[];

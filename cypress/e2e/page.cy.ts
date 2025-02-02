@@ -1,4 +1,4 @@
-import { assetsMock, companiesMock, locationsMock } from 'mocks/companies';
+import { assetsMock, companiesMock, locationsMock } from 'mocks/companies.mock';
 
 const companyId = companiesMock[0].id;
 const unitId = '656a07bbf2d4a1001e2144c2';
