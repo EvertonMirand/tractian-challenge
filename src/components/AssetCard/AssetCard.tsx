@@ -27,14 +27,14 @@ export const AssetCard = () => {
 
   return (
     <Card data-testid={`asset-card-${selectedAsset?.id ?? ''}`}>
-      <Header>
+      <Header data-testid={`asset-card-header-${selectedAsset?.id ?? ''}`}>
         {selectedAsset?.name} <AssetStatus asset={selectedAsset} />
       </Header>
 
       <InfoSection>
         <InfoBlock>
-          <Label>Tipo de Equipamento</Label>
-          <span>Motor Elétrico (Trifásico)</span>
+          <Label>Equipament type</Label>
+          <span>Eletric motor </span>
         </InfoBlock>
         <InfoBlock>
           <Label>Responsáveis</Label>
