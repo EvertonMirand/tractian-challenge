@@ -1,4 +1,4 @@
-# Asset Tree Viewer
+# Tractian Challenge
 
 ## Overview
 This project is a Tree View Application that visualizes a company's assets, including components, assets, and locations in a hierarchical structure. Users can filter and search for specific items, making asset management more efficient.
