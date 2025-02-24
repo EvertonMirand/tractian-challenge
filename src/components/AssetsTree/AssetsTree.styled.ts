@@ -70,3 +70,30 @@ export const TreeContainer = styled.div`
 export const NestedTree = styled.div`
   margin-left: ${({ theme }) => theme.spacing.lg};
 `;
+
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+`;
+
+export const PageButton = styled.button<{ disabled?: boolean }>`
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: ${({ disabled }) => (disabled ? '#ddd' : '#007bff')};
+  color: ${({ disabled }) => (disabled ? '#888' : '#fff')};
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+  transition: background 0.3s;
+
+  &:hover {
+    background-color: ${({ disabled }) => (disabled ? '#ddd' : '#0056b3')};
+  }
+`;
+
+export const PageInfo = styled.span`
+  font-size: 14px;
+  font-weight: bold;
+`;

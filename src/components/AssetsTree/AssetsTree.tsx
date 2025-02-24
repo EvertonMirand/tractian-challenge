@@ -11,10 +11,15 @@ import { AssetsTreeItem } from './AssetsTreeItem';
 import { setFilters } from '@/store/services/locationAssetsSlice';
 import { selectFilteredTree } from '@/store/selectors/selectFilteredTree';
 import debounce from 'lodash.debounce';
+import { PaginationContainer, PageButton, PageInfo } from './AssetsTree.styled';
+
+const itemsPerPage = 10;
 
 export const AssetsTree = () => {
   const dispatch = useDispatch();
   const [textFilter, setTextFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+
   const { loading, isAssetsLoading, isLocationsLoading } = useSelector(
     (state: RootState) => state.locations,
   );
@@ -58,6 +63,28 @@ export const AssetsTree = () => {
     }
   }, [selectedCompany, refetchLocations, refetchAssets]);
 
+  const totalItems = filteredTree.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = filteredTree.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1);
+    }
+  }, [currentPage, totalPages]);
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
   if (isAssetsLoading || isLocationsLoading || loading) {
     return <p>Loading...</p>;
   }
@@ -71,15 +98,33 @@ export const AssetsTree = () => {
       <SearchInput
         placeholder="Buscar Ativo ou Local"
         onChange={handleSearch}
-        data-testid={`search`}
+        data-testid="search"
         value={textFilter}
       />
 
       <TreeContainer>
-        {filteredTree?.map((location) => (
+        {paginatedData.map((location) => (
           <AssetsTreeItem key={location.id} child={location} />
         ))}
       </TreeContainer>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <PaginationContainer>
+          <PageButton onClick={handlePreviousPage} disabled={currentPage === 1}>
+            ← Previous
+          </PageButton>
+          <PageInfo>
+            Page {currentPage} of {totalPages}
+          </PageInfo>
+          <PageButton
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next →
+          </PageButton>
+        </PaginationContainer>
+      )}
     </Container>
   );
 };
