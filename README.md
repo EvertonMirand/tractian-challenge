@@ -34,8 +34,6 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Video Demonstration
-[Screencast from 2025-01-30 17-45-10.webm](https://github.com/user-attachments/assets/c2283b7c-9690-4364-9ad3-57873e510e08)
 
 This video demonstrates:
 - Loading company data.
